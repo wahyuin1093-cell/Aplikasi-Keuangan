@@ -1,4 +1,5 @@
 const form = document.getElementById('form-transaksi');
+const pilihBulan = document.getElementById('pilih-bulan');
 const inputTanggal = document.getElementById('tanggal');
 const selectJenis = document.getElementById('jenis');
 const selectKategori = document.getElementById('kategori');
@@ -17,17 +18,18 @@ const teksKategoriTerboros = document.getElementById('kategori-terboros');
 const filterTampilan = document.getElementById('filter-tampilan');
 const btnEkspor = document.getElementById('btn-ekspor');
 
-// Set tanggal hari ini secara otomatis di kolom tanggal
-inputTanggal.valueAsDate = new Date();
+// Set otomatis tanggal hari ini & bulan berjalan saat ini (Format: YYYY-MM)
+const hariIni = new Date();
+const tahunBulanSekarang = hariIni.toISOString().slice(0, 7);
+pilihBulan.value = tahunBulanSekarang;
+inputTanggal.valueAsDate = hariIni;
 
-// Ambil data dari memori browser
 let daftarTransaksi = JSON.parse(localStorage.getItem('catatanKeuanganV2')) || [];
 
 function formatRupiah(angka) {
   return 'Rp ' + angka.toLocaleString('id-ID');
 }
 
-// Sembunyikan pilihan "Sifat Pengeluaran" jika yang dipilih adalah Pemasukan
 selectJenis.addEventListener('change', function() {
   if (selectJenis.value === 'pemasukan') {
     areaSifat.style.display = 'none';
@@ -46,10 +48,14 @@ function perbaruiTampilan() {
   let totalBocor = 0;
   let pengeluaranPerKategori = {};
 
+  const bulanDipilih = pilihBulan.value; // Contoh: "2026-11"
   const modeFilter = filterTampilan.value;
 
   daftarTransaksi.forEach((transaksi, index) => {
-    // Hitung total keseluruhan (tidak terpengaruh filter tampilan)
+    // Saring hanya transaksi yang cocok dengan bulan yang sedang dipilih
+    if (!transaksi.tanggal.startsWith(bulanDipilih)) return;
+
+    // Hitung total khusus untuk bulan yang dipilih
     if (transaksi.jenis === 'pemasukan') {
       totalMasuk += transaksi.nominal;
     } else {
@@ -57,11 +63,10 @@ function perbaruiTampilan() {
       if (transaksi.sifat === 'bocor') {
         totalBocor += transaksi.nominal;
       }
-      // Catat total per kategori pengeluaran untuk mencari kategori terboros
       pengeluaranPerKategori[transaksi.kategori] = (pengeluaranPerKategori[transaksi.kategori] || 0) + transaksi.nominal;
     }
 
-    // Cek filter tampilan sebelum menampilkan baris ke layar
+    // Terapkan filter jenis/sifat
     if (modeFilter === 'bocor' && (transaksi.jenis !== 'pengeluaran' || transaksi.sifat !== 'bocor')) return;
     if (modeFilter === 'kebutuhan' && (transaksi.jenis !== 'pengeluaran' || transaksi.sifat !== 'kebutuhan')) return;
     if (modeFilter === 'pemasukan' && transaksi.jenis !== 'pemasukan') return;
@@ -91,17 +96,16 @@ function perbaruiTampilan() {
     daftarRiwayat.appendChild(item);
   });
 
-  // Update Kartu Saldo
+  // Update Kartu Saldo Bulanan
   const sisaSaldo = totalMasuk - totalKeluar;
   teksSaldo.innerText = 'Sisa Saldo: ' + formatRupiah(sisaSaldo);
   teksPemasukan.innerText = 'Pemasukan: ' + formatRupiah(totalMasuk);
   teksPengeluaran.innerText = 'Pengeluaran: ' + formatRupiah(totalKeluar);
 
-  // Update Radar Kebocoran
+  // Update Radar Kebocoran Bulanan
   const persenBocor = totalKeluar > 0 ? Math.round((totalBocor / totalKeluar) * 100) : 0;
   teksTotalBocor.innerText = `${formatRupiah(totalBocor)} (${persenBocor}% dari pengeluaran)`;
 
-  // Cari kategori pengeluaran terbesar
   let kategoriTerbesar = '';
   let nominalTerbesar = 0;
   for (const [kat, nom] of Object.entries(pengeluaranPerKategori)) {
@@ -112,9 +116,9 @@ function perbaruiTampilan() {
   }
 
   if (kategoriTerbesar) {
-    teksKategoriTerboros.innerText = `Pengeluaran terbesar saat ini: ${kategoriTerbesar} (${formatRupiah(nominalTerbesar)})`;
+    teksKategoriTerboros.innerText = `Pengeluaran terbesar bulan ini: ${kategoriTerbesar} (${formatRupiah(nominalTerbesar)})`;
   } else {
-    teksKategoriTerboros.innerText = 'Belum ada pengeluaran tercatat.';
+    teksKategoriTerboros.innerText = 'Belum ada pengeluaran di bulan ini.';
   }
 
   localStorage.setItem('catatanKeuanganV2', JSON.stringify(daftarTransaksi));
@@ -144,6 +148,9 @@ form.addEventListener('submit', function(event) {
     nominal
   });
 
+  // Otomatis sesuaikan tampilan periode ke bulan transaksi yang baru diinput
+  pilihBulan.value = tanggal.slice(0, 7);
+
   inputKeterangan.value = '';
   inputNominal.value = '';
   perbaruiTampilan();
@@ -154,19 +161,23 @@ function hapusTransaksi(index) {
   perbaruiTampilan();
 }
 
-// Jalankan ulang tampilan setiap kali filter diganti
+// Perbarui layar setiap kali periode bulan atau filter diganti
+pilihBulan.addEventListener('change', perbaruiTampilan);
 filterTampilan.addEventListener('change', perbaruiTampilan);
 
-// Fitur Ekspor Data ke CSV (bisa dibuka di Microsoft Excel / Google Sheets)
+// Unduh CSV khusus untuk bulan yang sedang dipilih
 btnEkspor.addEventListener('click', function() {
-  if (daftarTransaksi.length === 0) {
-    alert('Belum ada data transaksi untuk diunduh.');
+  const bulanDipilih = pilihBulan.value;
+  const dataBulanIni = daftarTransaksi.filter(t => t.tanggal.startsWith(bulanDipilih));
+
+  if (dataBulanIni.length === 0) {
+    alert('Belum ada data transaksi di bulan ini untuk diunduh.');
     return;
   }
 
   let csvContent = "Tanggal,Jenis,Kategori,Sifat,Keterangan,Nominal\n";
-  daftarTransaksi.forEach(t => {
-    const ketBersih = t.keterangan.replace(/,/g, ' '); // Hindari koma merusak kolom CSV
+  dataBulanIni.forEach(t => {
+    const ketBersih = t.keterangan.replace(/,/g, ' ');
     csvContent += `${t.tanggal},${t.jenis},${t.kategori},${t.sifat},${ketBersih},${t.nominal}\n`;
   });
 
@@ -174,7 +185,7 @@ btnEkspor.addEventListener('click', function() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', 'laporan-keuangan-pribadi.csv');
+  link.setAttribute('download', `laporan-keuangan-${bulanDipilih}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

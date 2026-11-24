@@ -10,7 +10,13 @@
 
   <h1>Catatan Keuangan Pribadi</h1>
 
-  <!-- Bagian Ringkasan Saldo -->
+  <!-- Pemilih Periode Bulan (Otomatis mulai dari 0 tiap ganti bulan) -->
+  <div class="kotak-kontrol" style="display: flex; justify-content: space-between; align-items: center;">
+    <label for="pilih-bulan" style="margin: 0;">Periode Rekap:</label>
+    <input type="month" id="pilih-bulan" style="width: auto; margin: 0; font-weight: bold;">
+  </div>
+
+  <!-- Bagian Ringkasan Saldo Bulanan -->
   <div class="kartu-saldo">
     <h3 id="sisa-saldo">Sisa Saldo: Rp 0</h3>
     <div class="detail-saldo">
@@ -19,11 +25,11 @@
     </div>
   </div>
 
-  <!-- Bagian Radar Deteksi Kebocoran -->
+  <!-- Bagian Radar Deteksi Kebocoran Bulanan -->
   <div class="kartu-bocor">
-    <h3>Radar Kebocoran Pengeluaran</h3>
+    <h3>Radar Kebocoran Bulan Ini</h3>
     <p class="angka-bocor" id="total-bocor">Rp 0 (0%)</p>
-    <p class="info-bocor" id="kategori-terboros">Belum ada pengeluaran tercatat.</p>
+    <p class="info-bocor" id="kategori-terboros">Belum ada pengeluaran di bulan ini.</p>
   </div>
 
   <!-- Bagian Form Tambah Transaksi -->
@@ -60,7 +66,6 @@
       </div>
       <br>
 
-      <!-- Kotak khusus yang muncul saat memilih Pengeluaran -->
       <div id="area-sifat">
         <label>Sifat Pengeluaran (Kejujuran):</label>
         <select id="sifat">
@@ -100,7 +105,7 @@
   </div>
 
   <!-- Bagian Riwayat Transaksi -->
-  <h3>Riwayat Transaksi</h3>
+  <h3>Riwayat Transaksi Bulan Ini</h3>
   <ul id="daftar-riwayat"></ul>
 
   <script src="script.js"></script>
