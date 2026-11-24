@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catatan & Radar Kebocoran Keuangan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Catatan Keuangan Pribadi</h1>
+
+  <!-- Bagian Ringkasan Saldo -->
+  <div class="kartu-saldo">
+    <h3 id="sisa-saldo">Sisa Saldo: Rp 0</h3>
+    <div class="detail-saldo">
+      <p id="total-pemasukan" class="pemasukan">Pemasukan: Rp 0</p>
+      <p id="total-pengeluaran" class="pengeluaran">Pengeluaran: Rp 0</p>
+    </div>
+  </div>
+
+  <!-- Bagian Radar Deteksi Kebocoran -->
+  <div class="kartu-bocor">
+    <h3>Radar Kebocoran Pengeluaran</h3>
+    <p class="angka-bocor" id="total-bocor">Rp 0 (0%)</p>
+    <p class="info-bocor" id="kategori-terboros">Belum ada pengeluaran tercatat.</p>
+  </div>
+
+  <!-- Bagian Form Tambah Transaksi -->
+  <div class="kotak-form">
+    <h3>Tambah Transaksi Baru</h3>
+    <form id="form-transaksi">
+      <div class="baris-dua">
+        <div>
+          <label>Tanggal:</label>
+          <input type="date" id="tanggal">
+        </div>
+        <div>
+          <label>Jenis:</label>
+          <select id="jenis">
+            <option value="pengeluaran">Pengeluaran (-)</option>
+            <option value="pemasukan">Pemasukan (+)</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div>
+        <label>Kategori:</label>
+        <select id="kategori">
+          <option value="Makan & Minum">Makan & Minum</option>
+          <option value="Jajan & Kopi">Jajan & Kopi</option>
+          <option value="Belanja Online">Belanja Online</option>
+          <option value="Transportasi">Transportasi & Bensin</option>
+          <option value="Tagihan & Pulsa">Tagihan, Listrik & Kuota</option>
+          <option value="Hiburan">Hiburan & Langganan</option>
+          <option value="Gaji / Pemasukan">Gaji / Pemasukan</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      <br>
+
+      <!-- Kotak khusus yang muncul saat memilih Pengeluaran -->
+      <div id="area-sifat">
+        <label>Sifat Pengeluaran (Kejujuran):</label>
+        <select id="sifat">
+          <option value="kebutuhan">Kebutuhan Wajib (Harus keluar)</option>
+          <option value="bocor">Keinginan / Potensi Bocor (Bisa dihemat)</option>
+        </select>
+      </div>
+      <br>
+
+      <div>
+        <label>Keterangan:</label>
+        <input type="text" id="keterangan" placeholder="Contoh: Es kopi susu kekinian">
+      </div>
+      <br>
+
+      <div>
+        <label>Nominal (Rp):</label>
+        <input type="number" id="nominal" placeholder="Contoh: 25000">
+      </div>
+      <br>
+
+      <button type="submit">Simpan Transaksi</button>
+    </form>
+  </div>
+
+  <!-- Bagian Filter & Ekspor -->
+  <div class="kotak-kontrol">
+    <div class="baris-dua">
+      <select id="filter-tampilan">
+        <option value="semua">Tampilkan: Semua</option>
+        <option value="bocor">Hanya Potensi Bocor</option>
+        <option value="kebutuhan">Hanya Kebutuhan Wajib</option>
+        <option value="pemasukan">Hanya Pemasukan</option>
+      </select>
+      <button type="button" id="btn-ekspor" class="btn-sekunder">Unduh Excel (CSV)</button>
+    </div>
+  </div>
+
+  <!-- Bagian Riwayat Transaksi -->
+  <h3>Riwayat Transaksi</h3>
+  <ul id="daftar-riwayat"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  max-width: 480px;
+  margin: 25px auto;
+  padding: 15px;
+}
+
+h1 {
+  text-align: center;
+  color: #1a202c;
+  font-size: 22px;
+}
+
+.kartu-saldo, .kotak-form, .kartu-bocor, .kotak-kontrol {
+  background-color: #ffffff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+
+.kartu-saldo {
+  text-align: center;
+}
+
+.kartu-saldo h3 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  color: #2b6cb0;
+}
+
+.detail-saldo {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #edf2f7;
+  padding-top: 10px;
+}
+
+/* Desain Kartu Radar Kebocoran */
+.kartu-bocor {
+  background-color: #fffaf0;
+  border-left: 5px solid #dd6b20;
+}
+
+.kartu-bocor h3 {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  color: #9c4221;
+}
+
+.angka-bocor {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #c05621;
+}
+
+.info-bocor {
+  margin: 6px 0 0 0;
+  font-size: 13px;
+  color: #7b341e;
+}
+
+.pemasukan { color: #2f855a; font-weight: bold; }
+.pengeluaran { color: #c53030; font-weight: bold; }
+
+.baris-dua {
+  display: flex;
+  gap: 10px;
+}
+
+.baris-dua > div, .baris-dua > select, .baris-dua > button {
+  flex: 1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+input, select {
+  width: 100%;
+  padding: 9px;
+  margin-top: 4px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 11px;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { background-color: #2b6cb0; }
+
+.btn-sekunder {
+  background-color: #2f855a;
+  margin-top: 4px;
+}
+
+.btn-sekunder:hover { background-color: #276749; }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: #ffffff;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta-transaksi {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 3px;
+}
+
+.badge-bocor {
+  background-color: #feebc8;
+  color: #9c4221;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.badge-wajib {
+  background-color: #e2e8f0;
+  color: #4a5568;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
